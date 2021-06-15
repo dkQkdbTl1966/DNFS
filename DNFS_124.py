@@ -16,11 +16,13 @@ engine.input_variables = [
       maximum=1.000,
       lock_range=False,
       terms=[
-      fl.Triangle("DARK", 0.000, 0.250, 0.500), #Triangular      Membership Function defining "Dark"
-      fl.Triangle("MEDIUM", 0.250, 0.500, 0.750), #Triangular      Membership Function defining "Medium"
-      fl.Triangle("BRIGHT", 0.500, 0.750, 1.000) #Triangular      Membership Function defining "Bright"
+      fl.Bell("DARK", -10.000, 5.000, 3.000), #Generalized Bell Membership Function defining "Dark"
+      fl.Bell("MEDIUM", 0.000, 5.000, 3.000), #Generalized Bell  Membership Function defining "Medium"
+      fl.Bell("BRIGHT", 10.000, 5.000, 3.000) #Generalized Bell  Membership Function defining "Bright"
+        ]
+    )
 ]
-) ]
+
 #Defining the Output Variables (Defuzzification)
 engine.output_variables = [
       fl.OutputVariable(
@@ -30,13 +32,14 @@ engine.output_variables = [
       minimum=0.000,
       maximum=1.000,
       lock_range=False,
-      aggregation=None,
-      defuzzifier=fl.WeightedAverage("TakagiSugeno"),
+      aggregation=fl.Maximum(),
+      defuzzifier=fl.Centroid(200),
       lock_previous=False,
       terms=[
-      fl.Constant("LOW", 0.250), #Constant Membership Function      defining "LOW"
-      fl.Constant("MEDIUM", 0.500), #Constant Membership      Function defining "MEDIUM"
-      fl.Constant("HIGH", 0.750) #Constant Membership Function      defining "HIGH"
+      fl.Sigmoid("LOW", 0.500, -30.000), #Triangular Membership Function defining "LOW Light"
+      fl.Sigmoid("MEDIUM", 0.130, 30.000), #Triangular Membership Function defining "MEDIUM light"
+      fl.Sigmoid("HIGH", 0.830, 30.000), #Triangular Membership Function defining "HIGH Light"
+      fl.Triangle("BRIGHT", 0.500, 0.750, 1.000) #Triangular Membership Function defining "Bright"
         ]
       )
 ]
@@ -56,5 +59,5 @@ engine.rule_blocks = [
       fl.Rule.create("if Ambient is MEDIUM then Power is MEDIUM", engine),
       fl.Rule.create("if Ambient is BRIGHT then Power is LOW", engine)
         ]
-    )
+      )
 ]

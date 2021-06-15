@@ -1,29 +1,51 @@
+import sklearn
+import skfuzzy
+import fuzzycmeans
+
 import pandas as pd
 import numpy as np
-import numpy as np
+
+import math
+import random
 import logging
-from fuzzy_clustering import FCM
-from visualization import draw_model_2d
+
+#
+from fuzzycmeans.fuzzy_clustering import fcm
+# from fuzzycmeans.visualization import draw_model_2d
+from fuzzycmeans.visualization import draw_model_2d
+#
 from sklearn import preprocessing
 
+# Importing theairlines data
+dataset = pd.read_csv("AirlinesCluster.csv")
 
-dataset = pd.read_csv("AirlinesCluster.csv") #Importing the airlines data
-
-dataset1 = dataset.copy() #Making a copy so that original data remains unaffected
-
-dataset1 = dataset1[["Balance", "BonusMiles"]][:500] #Selecting only first 500 rows for faster computation
+print (dataset)
 
 
-dataset1_standardized = preprocessing.scale(dataset1) #Standardizing the data to scale it between the upper and lower limit of 1 and 0
+# Making a copy so that original data remains unaffected
+dataset1 = dataset.copy()
 
+# Selecting only first 500 rows for faster computation
+dataset1 = dataset1[["Balance", "BonusMiles"]][:500]
+dataset1_standardized = preprocessing.scale(dataset1)
+
+# Standardizing the data to scale it between the upper and lower limit of 1 and 0
 dataset1_standardized = pd.DataFrame(dataset1_standardized)
 
-fcm.set_logger(tostdout=False) #Telling the package class to stop the unnecessary output
+print (dataset1_standardized)
 
-fcm = FCM(n_clusters=5) #Defining k=5
+# Telling the package class to stop the unnecessary output
+FCM=fcm()
+FCM.set_logger(tostdout=False)
 
-fcm.fit(dataset1_standardized) #Training on data
+# Defining k=5
+fcm = fcm(n_clusters=5)
 
-predicted_membership = fcm.predict(np.array(dataset1_standardized)) #Testing on same data
+# Training on data
+fcm.fit(dataset1_standardized)
 
-draw_model_2d(fcm, data=np.array(dataset1_standardized), membership=predicted_membership) #Visualizing the data
+# Testing on same data
+predicted_membership = fcm.predict(np.array(dataset1_standardized))
+
+# Visualizing the data
+draw_model_2d(fcm, data=np.array(dataset1_standardized), membership=predicted_membership)

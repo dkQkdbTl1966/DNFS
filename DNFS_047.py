@@ -1,6 +1,7 @@
 #Importing Necessary Package
 import numpy as np
 import skfuzzy as fuzz
+# pip install scikit-fuzzy
 import matplotlib.pyplot as plt
 #%matplotlib inline
 

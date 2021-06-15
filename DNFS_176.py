@@ -1,8 +1,10 @@
+import keras.utils
 from keras.datasets import mnist
+
 import matplotlib.pyplot as plt
 from keras.models import Sequential
 from keras.layers import Dense, Conv2D, Flatten
-from keras.utils import to_categorical
+from keras.utils.np_utils import to_categorical
 
 #download mnist data and split into train and test sets
 (X_train, y_train), (X_test, y_test) = mnist.load_data()
